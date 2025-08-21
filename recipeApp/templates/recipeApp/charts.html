@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Library - Charts</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Neue', cursive;
+            line-height: 1.6;
+            color: #0D0D0D;
+            background: #BBBDF2;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation */
+        nav {
+            background: #A0A4F2;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Bangers', cursive;
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: #0D0D0D;
+            letter-spacing: 2px;
+            background: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 3px solid #0D0D0D;
+            position: relative;
+        }
+
+        .logo::before {
+            content: "";
+            position: absolute;
+            top: -6px;
+            left: -6px;
+            right: -6px;
+            bottom: -6px;
+            background: radial-gradient(circle at 2px 2px, #0D0D0D 1px, transparent 1px);
+            background-size: 8px 8px;
+            border-radius: 11px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .logo:hover::before {
+            opacity: 1;
+        }
+
+        .logo:hover {
+            transform: scale(1.1) rotate(2deg);
+            box-shadow: 0 8px 20px rgba(242, 237, 160, 0.5);
+            background: #F2EDA0;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #0D0D0D;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            background: #BDF288;
+            padding: 8px 20px;
+            border-radius: 25px;
+            border: 2px solid #0D0D0D;
+            display: inline-block;
+            font-size: 1rem;
+            box-shadow: 0 3px 8px rgba(189, 242, 136, 0.3);
+        }
+
+        .nav-links a:hover {
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(242, 237, 160, 0.4);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 120px 0 80px;
+            margin-top: 100px;
+        }
+
+        /* Page Title */
+        .page-title {
+            font-family: 'Bangers', cursive;
+            font-size: 3.5rem;
+            margin-bottom: 2rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-shadow: 3px 3px 0px rgba(0,0,0,0.2);
+            background: white;
+            padding: 25px 80px;
+            border-radius: 20px;
+            display: block;
+            width: 80%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s ease;
+            cursor: pointer;
+            position: relative;
+            border: 4px solid #0D0D0D;
+            color: #0D0D0D;
+            text-align: center;
+        }
+
+        .page-title:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+            background: #BDF288;
+            border-color: #0D0D0D;
+        }
+
+        /* Chart Form Container */
+        .chart-form-container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 4px solid #0D0D0D;
+            margin: 2rem auto;
+            max-width: 600px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chart-form-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 2px 2px, #0D0D0D 1px, transparent 1px);
+            background-size: 8px 8px;
+            border-radius: 16px;
+            z-index: 1;
+            opacity: 0.3;
+        }
+
+        .chart-form-container h2 {
+            font-family: 'Bangers', cursive;
+            font-size: 2rem;
+            color: #0D0D0D;
+            text-align: center;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 2;
+        }
+
+        .chart-form-container p {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+            color: #0D0D0D;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Form Styling */
+        .chart-form {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .chart-form select {
+            background: #BDF288;
+            border: 3px solid #0D0D0D;
+            border-radius: 15px;
+            padding: 12px 20px;
+            font-family: 'Comic Neue', cursive;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #0D0D0D;
+            outline: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            margin-bottom: 20px;
+            min-width: 200px;
+        }
+
+        .chart-form select:focus {
+            background: #F2EDA0;
+            border-color: #0D0D0D;
+            box-shadow: 0 0 15px rgba(242, 237, 160, 0.6);
+        }
+
+        .chart-form button {
+            background: #F2EDA0;
+            border: 3px solid #0D0D0D;
+            border-radius: 25px;
+            padding: 12px 30px;
+            font-family: 'Comic Neue', cursive;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #0D0D0D;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: capitalize;
+            box-shadow: 0 5px 15px rgba(242, 237, 160, 0.3);
+        }
+
+        .chart-form button:hover {
+            background: white;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Chart Container */
+        .chart-container {
+            background: #F2EDA0;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 4px solid #0D0D0D;
+            margin: 2rem auto;
+            max-width: 800px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chart-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 2px 2px, #0D0D0D 1px, transparent 1px);
+            background-size: 8px 8px;
+            border-radius: 16px;
+            z-index: 1;
+            opacity: 0.3;
+        }
+
+        .chart-container h2 {
+            font-family: 'Bangers', cursive;
+            font-size: 2rem;
+            color: #0D0D0D;
+            text-align: center;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 2;
+        }
+
+        .chart-container img {
+            max-width: 100%;
+            height: auto;
+            border: 3px solid #0D0D0D;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 2;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .chart-container img:hover {
+            transform: scale(1.02);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Placeholder Message */
+        .placeholder-message {
+            background: #BDF288;
+            border: 3px solid #0D0D0D;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #0D0D0D;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Animations */
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2.5rem;
+                padding: 20px 40px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .chart-form-container,
+            .chart-container {
+                margin: 1rem;
+                padding: 20px;
+            }
+
+            .chart-form select {
+                min-width: 150px;
+                font-size: 0.9rem;
+            }
+
+            .chart-form button {
+                font-size: 1rem;
+                padding: 10px 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="container">
+            <div class="nav-content">
+                <div class="logo">Recipe Library</div>
+                <ul class="nav-links">
+                    <li><a href="{% url 'recipeApp:home' %}">Home</a></li>
+                    <li><a href="{% url 'recipeApp:list' %}">All Recipes</a></li>
+                    <li><a href="{% url 'recipeApp:about' %}">About</a></li>
+                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container">
+            <h1 class="page-title">Recipe Difficulty Charts</h1>
+            
+            <div class="chart-form-container">
+                <h2>Select Chart Type</h2>
+                
+                <form class="chart-form" action="" method="POST">
+                    {% csrf_token %}
+                    {{form}}
+                    <button type="submit">Generate Chart</button>
+                </form>
+            </div>
+            
+            {% if chart %}
+            <div class="chart-container">
+                <h2>Recipe Difficulty Distribution</h2>
+                <img src="data:image/png;base64,{{chart|safe}}" alt="Recipe Difficulty Chart">
+            </div>
+            {% else %}
+            <div class="chart-container">
+                <div class="placeholder-message">
+                    <p>Select a chart type above and click "Generate Chart" to visualize recipe difficulty distribution!</p>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
