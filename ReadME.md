@@ -43,8 +43,8 @@ Python | virtualenvwrapper | Django | DataFrame(pandas) | matplotlib
 * I've learned to structure my project in the way that Django requires with MVT type of architacture. One awesome advantage of this is that parts can be reused without have to re-written. If something from one project was applicaable to some other project, I could just re-use it, such as a login. 
 
 
-GitHub Repository site: 
+GitHub Repository site: https://github.com/Bre-Wonder/recipe_app
 
-Live application deployed to the Azure Cloud:
+Live application deployed to the Azure Cloud: recipeappcf-awh5b5dbgweucxgr.westus2-01.azurewebsites.net
 
 Note: Cursor AI used to help in builing out html files with style and formatting. Chapt GPT used for helping to create testing files.
