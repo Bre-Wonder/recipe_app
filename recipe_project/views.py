@@ -39,3 +39,15 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return render(request, 'auth/success.html')
+
+def debug_view(request):
+    """Simple debug view to test if the app is working"""
+    import os
+    context = {
+        'debug_info': {
+            'environment': os.environ.get('WEBSITE_HOSTNAME', 'Not in Azure'),
+            'database_engine': 'postgresql' if 'AZURE_POSTGRESQL_CONNECTIONSTRING' in os.environ else 'sqlite',
+            'debug_mode': os.environ.get('DJANGO_SETTINGS_MODULE', 'Unknown'),
+        }
+    }
+    return render(request, 'auth/debug.html', context)
