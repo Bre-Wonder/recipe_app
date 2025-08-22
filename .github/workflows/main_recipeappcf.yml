@@ -34,7 +34,6 @@ jobs:
 
       - name: Run collectstatic
         run: |
-          export DJANGO_SETTINGS_MODULE=recipe_project.deployment
           python manage.py collectstatic --noinput
         
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
