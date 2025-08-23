@@ -25,6 +25,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# Configure WhiteNoise to serve media files
+WHITENOISE_USE_FINDERS = True
+WHITENOISE_AUTOREFRESH = True
+
 # Add logging configuration for better error tracking
 LOGGING = {
     'version': 1,
@@ -49,6 +53,10 @@ LOGGING = {
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Media files configuration
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Only configure database if we're in Azure
 if 'AZURE_POSTGRESQL_CONNECTIONSTRING' in os.environ:

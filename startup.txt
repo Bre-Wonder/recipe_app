@@ -1,1 +1,1 @@
-python manage.py check_db && python manage.py create_test_user && gunicorn --bind=0.0.0.0 --timeout 600 recipe_project.wsgi 
+python startup.py 
