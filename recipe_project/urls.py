@@ -19,7 +19,7 @@ from django.urls import path
 from django.urls import include
 from django.conf import settings
 from django.conf.urls.static import static
-from .views import login_view, logout_view, debug_view, test_db_view, test_login_view, setup_database_view, test_media_view
+from .views import login_view, logout_view, debug_view, test_db_view, test_login_view, setup_database_view, test_media_view, serve_media
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -33,4 +33,9 @@ urlpatterns = [
     path('test-media/', test_media_view, name='test_media'),
 ]
 
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# Serve media files in development
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+else:
+    # In production, serve media files through our custom view
+    urlpatterns += [path('media/<path:path>', serve_media, name='serve_media')]

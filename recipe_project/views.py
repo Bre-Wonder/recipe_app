@@ -268,3 +268,28 @@ def test_media_view(request):
             'status': 'error',
             'message': f'Media test failed: {str(e)}'
         }, status=500)
+
+def serve_media(request, path):
+    """Serve media files in production"""
+    from django.conf import settings
+    from django.http import FileResponse, Http404
+    import os
+    
+    # Security check - only serve files from media directory
+    if '..' in path or path.startswith('/'):
+        raise Http404("File not found")
+    
+    file_path = os.path.join(settings.MEDIA_ROOT, path)
+    
+    if not os.path.exists(file_path):
+        raise Http404("File not found")
+    
+    # Get file extension to set content type
+    import mimetypes
+    content_type, _ = mimetypes.guess_type(file_path)
+    if content_type is None:
+        content_type = 'application/octet-stream'
+    
+    response = FileResponse(open(file_path, 'rb'), content_type=content_type)
+    response['Content-Disposition'] = f'inline; filename="{os.path.basename(file_path)}"'
+    return response

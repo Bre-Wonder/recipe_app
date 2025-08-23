@@ -28,6 +28,7 @@ MIDDLEWARE = [
 # Configure WhiteNoise to serve media files
 WHITENOISE_USE_FINDERS = True
 WHITENOISE_AUTOREFRESH = True
+WHITENOISE_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Add logging configuration for better error tracking
 LOGGING = {
