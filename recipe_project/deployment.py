@@ -60,6 +60,10 @@ if 'AZURE_POSTGRESQL_CONNECTIONSTRING' in os.environ:
             key, value = pair.split('=', 1)
             parameters[key] = value
 
+    # Add some debugging for connection string parsing
+    print(f"Connection string: {connection_string}")
+    print(f"Parsed parameters: {parameters}")
+
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
@@ -73,6 +77,11 @@ if 'AZURE_POSTGRESQL_CONNECTIONSTRING' in os.environ:
             },
         }
     }
+    
+    # Print database config for debugging (without password)
+    db_config = DATABASES['default'].copy()
+    db_config['PASSWORD'] = '***'
+    print(f"Database config: {db_config}")
 else:
     # Fall back to development database for build process
     from .settings import DATABASES

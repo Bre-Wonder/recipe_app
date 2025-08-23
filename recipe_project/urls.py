@@ -19,7 +19,7 @@ from django.urls import path
 from django.urls import include
 from django.conf import settings
 from django.conf.urls.static import static
-from .views import login_view, logout_view, debug_view
+from .views import login_view, logout_view, debug_view, test_db_view, test_login_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,6 +27,8 @@ urlpatterns = [
     path('login/', login_view, name='login'),
     path('logout/', logout_view, name='logout'),
     path('debug/', debug_view, name='debug'),
+    path('test-db/', test_db_view, name='test_db'),
+    path('test-login/', test_login_view, name='test_login'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
