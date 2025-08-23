@@ -269,6 +269,73 @@ def test_media_view(request):
             'message': f'Media test failed: {str(e)}'
         }, status=500)
 
+def check_recipes_view(request):
+    """Check what recipes exist and their image paths"""
+    from recipeApp.models import Recipe
+    from django.http import JsonResponse
+    
+    try:
+        recipes = Recipe.objects.all()
+        recipe_data = []
+        
+        for recipe in recipes:
+            recipe_data.append({
+                'id': recipe.id,
+                'name': recipe.name,
+                'pic_name': recipe.pic.name if recipe.pic else 'No image',
+                'pic_url': recipe.pic.url if recipe.pic else 'No URL',
+                'has_image': bool(recipe.pic)
+            })
+        
+        return JsonResponse({
+            'status': 'success',
+            'recipe_count': len(recipe_data),
+            'recipes': recipe_data
+        })
+    except Exception as e:
+        return JsonResponse({
+            'status': 'error',
+            'message': f'Recipe check failed: {str(e)}'
+        }, status=500)
+
+def debug_recipes_view(request):
+    """Debug view to show recipe information without authentication"""
+    from recipeApp.models import Recipe
+    from django.http import JsonResponse
+    import os
+    
+    try:
+        recipes = Recipe.objects.all()
+        recipe_data = []
+        
+        for recipe in recipes:
+            # Check if image file exists
+            image_exists = False
+            image_path = None
+            if recipe.pic:
+                image_path = os.path.join('media', str(recipe.pic))
+                image_exists = os.path.exists(image_path)
+            
+            recipe_data.append({
+                'id': recipe.id,
+                'name': recipe.name,
+                'pic_field': str(recipe.pic) if recipe.pic else 'None',
+                'pic_url': recipe.pic.url if recipe.pic else 'None',
+                'image_exists': image_exists,
+                'image_path': image_path
+            })
+        
+        return JsonResponse({
+            'status': 'success',
+            'recipe_count': len(recipe_data),
+            'recipes': recipe_data
+        })
+    except Exception as e:
+        return JsonResponse({
+            'status': 'error',
+            'message': f'Debug failed: {str(e)}'
+        }, status=500)
+
 def serve_media(request, path):
     """Serve media files in production"""
     from django.conf import settings

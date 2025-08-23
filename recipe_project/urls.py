@@ -19,7 +19,7 @@ from django.urls import path
 from django.urls import include
 from django.conf import settings
 from django.conf.urls.static import static
-from .views import login_view, logout_view, debug_view, test_db_view, test_login_view, setup_database_view, test_media_view, serve_media
+from .views import login_view, logout_view, debug_view, test_db_view, test_login_view, setup_database_view, test_media_view, serve_media, check_recipes_view, debug_recipes_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -31,6 +31,8 @@ urlpatterns = [
     path('test-login/', test_login_view, name='test_login'),
     path('setup-db/', setup_database_view, name='setup_db'),
     path('test-media/', test_media_view, name='test_media'),
+    path('check-recipes/', check_recipes_view, name='check_recipes'),
+    path('debug-recipes/', debug_recipes_view, name='debug_recipes'),
 ]
 
 # Serve media files in development
