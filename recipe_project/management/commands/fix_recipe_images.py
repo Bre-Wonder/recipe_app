@@ -3,7 +3,7 @@ from recipeApp.models import Recipe
 import os
 
 class Command(BaseCommand):
-    help = 'Fix recipe image paths by matching recipe names to actual image files'
+    help = 'Fix recipe image paths by mapping to original image files'
 
     def handle(self, *args, **options):
         recipes = Recipe.objects.all()
@@ -19,7 +19,7 @@ class Command(BaseCommand):
             self.stdout.write("Media directory not found!")
             return
         
-        # Recipe name to image file mapping
+        # Recipe name to original image file mapping
         recipe_image_mapping = {
             'mochi': 'mochi.jpg',
             'iced vanilla latte': 'iced.vanilla.latte.jpg',
@@ -43,7 +43,7 @@ class Command(BaseCommand):
             self.stdout.write(f"\nRecipe: {recipe.name}")
             self.stdout.write(f"Current pic field: {recipe.pic}")
             
-            # Try to find matching image
+            # Try to find matching original image
             recipe_name_lower = recipe.name.lower()
             matching_image = None
             
@@ -65,11 +65,18 @@ class Command(BaseCommand):
             
             # Update recipe if we found a matching image
             if matching_image:
-                if str(recipe.pic) != matching_image:
-                    recipe.pic = matching_image
-                    recipe.save()
-                    self.stdout.write(f"Updated recipe '{recipe.name}' with image: {matching_image}")
-                    updated_count += 1
+                # Check if the current pic field is different from the original
+                current_pic = str(recipe.pic)
+                if current_pic != matching_image:
+                    # Check if the original file exists
+                    original_file_path = os.path.join(media_dir, matching_image)
+                    if os.path.exists(original_file_path):
+                        recipe.pic = matching_image
+                        recipe.save()
+                        self.stdout.write(f"Updated recipe '{recipe.name}' with original image: {matching_image}")
+                        updated_count += 1
+                    else:
+                        self.stdout.write(f"Original image file not found: {matching_image}")
                 else:
                     self.stdout.write(f"Recipe '{recipe.name}' already has correct image: {matching_image}")
             else:
