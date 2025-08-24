@@ -71,3 +71,41 @@ def serve_media(request, path):
     response = FileResponse(open(file_path, 'rb'), content_type=content_type)
     response['Content-Disposition'] = f'inline; filename="{os.path.basename(file_path)}"'
     return response
+
+def check_recipe_images(request):
+    """Check recipe images status"""
+    from recipeApp.models import Recipe
+    from django.http import JsonResponse
+    import os
+    
+    try:
+        recipes = Recipe.objects.all()
+        recipe_data = []
+        
+        for recipe in recipes:
+            # Check if image file exists
+            image_exists = False
+            image_path = None
+            if recipe.pic:
+                image_path = os.path.join('media', str(recipe.pic))
+                image_exists = os.path.exists(image_path)
+            
+            recipe_data.append({
+                'id': recipe.id,
+                'name': recipe.name,
+                'pic_field': str(recipe.pic) if recipe.pic else 'None',
+                'pic_url': recipe.pic.url if recipe.pic else 'None',
+                'image_exists': image_exists,
+                'image_path': image_path
+            })
+        
+        return JsonResponse({
+            'status': 'success',
+            'recipe_count': len(recipe_data),
+            'recipes': recipe_data
+        })
+    except Exception as e:
+        return JsonResponse({
+            'status': 'error',
+            'message': f'Check failed: {str(e)}'
+        }, status=500)

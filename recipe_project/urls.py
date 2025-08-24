@@ -19,13 +19,14 @@ from django.urls import path
 from django.urls import include
 from django.conf import settings
 from django.conf.urls.static import static
-from .views import login_view, logout_view, serve_media
+from .views import login_view, logout_view, serve_media, check_recipe_images
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('recipeApp.urls')),
     path('login/', login_view, name='login'),
     path('logout/', logout_view, name='logout'),
+    path('check-images/', check_recipe_images, name='check_images'),
 ]
 
 # Serve media files in development
