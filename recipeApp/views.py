@@ -126,7 +126,12 @@ def create_recipe(request):
             form.save()
             # sends message to the user that recipe was added successfully
             messages.success(request, 'Recipe was added successfully')
-            return redirect('recipeApp:list')
+            # Add a flag to show popup before redirect
+            context = {
+                'form': form,
+                'show_success_popup': True
+            }
+            return render(request, 'recipeApp/create_recipe.html', context)
     else:
         form = CreateRecipe()
 

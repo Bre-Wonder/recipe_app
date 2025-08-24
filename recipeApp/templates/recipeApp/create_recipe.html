@@ -570,22 +570,34 @@
                 popup.classList.add('show');
                 overlay.classList.add('show');
                 
-                // Auto-hide after 3 seconds
+                // Auto-hide after 7 seconds and redirect to recipe list
                 setTimeout(function() {
                     hidePopup();
-                }, 3000);
+                    // Redirect to recipe list after popup closes
+                    window.location.href = "{% url 'recipeApp:list' %}";
+                }, 7000);
             }
             
             // Close popup when clicking the close button
-            closeBtn.addEventListener('click', hidePopup);
+            closeBtn.addEventListener('click', function() {
+                hidePopup();
+                // Redirect to recipe list after popup closes
+                window.location.href = "{% url 'recipeApp:list' %}";
+            });
             
             // Close popup when clicking the overlay
-            overlay.addEventListener('click', hidePopup);
+            overlay.addEventListener('click', function() {
+                hidePopup();
+                // Redirect to recipe list after popup closes
+                window.location.href = "{% url 'recipeApp:list' %}";
+            });
             
             // Close popup when pressing Escape key
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape') {
                     hidePopup();
+                    // Redirect to recipe list after popup closes
+                    window.location.href = "{% url 'recipeApp:list' %}";
                 }
             });
             
