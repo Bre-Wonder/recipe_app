@@ -413,6 +413,88 @@
                 transform: scale(1);
             }
         }
+
+        /* Success Popup Styles */
+        .success-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #BDF288;
+            border: 4px solid #0D0D0D;
+            border-radius: 20px;
+            padding: 30px 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            z-index: 10000;
+            font-family: 'Bangers', cursive;
+            font-size: 1.5rem;
+            color: #0D0D0D;
+            text-align: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .success-popup.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .success-popup::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 2px 2px, #0D0D0D 1px, transparent 1px);
+            background-size: 8px 8px;
+            border-radius: 16px;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        .popup-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: #F27457;
+            border: 2px solid #0D0D0D;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #0D0D0D;
+            transition: all 0.3s ease;
+        }
+
+        .popup-close:hover {
+            background: #BF665E;
+            transform: scale(1.1);
+        }
+
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .popup-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
     </style>
 </head>
 <body>
@@ -442,9 +524,15 @@
                 {% if messages %}
                     <div class="messages">
                         {% for message in messages %}
-                            <div class="alert alert-{{ message.tags }}">
-                                {{ message }}
-                            </div>
+                            {% if message.tags == 'success' %}
+                                <div class="alert alert-{{ message.tags }}" style="display: none;">
+                                    {{ message }}
+                                </div>
+                            {% else %}
+                                <div class="alert alert-{{ message.tags }}">
+                                    {{ message }}
+                                </div>
+                            {% endif %}
                         {% endfor %}
                     </div>
                 {% endif %}
@@ -457,5 +545,55 @@
             </div>
         </div>
     </section>
+
+    <!-- Success Popup -->
+    <div class="popup-overlay" id="popupOverlay"></div>
+    <div class="success-popup" id="successPopup">
+        <div class="popup-close" id="popupClose">&times;</div>
+        <div id="popupMessage">Recipe was added successfully!</div>
+    </div>
+
+    <script>
+        // Check for success messages on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const successMessages = document.querySelectorAll('.alert-success');
+            const popup = document.getElementById('successPopup');
+            const overlay = document.getElementById('popupOverlay');
+            const closeBtn = document.getElementById('popupClose');
+            
+            // Show popup if there's a success message
+            if (successMessages.length > 0) {
+                const messageText = successMessages[0].textContent.trim();
+                document.getElementById('popupMessage').textContent = messageText;
+                
+                // Show popup and overlay
+                popup.classList.add('show');
+                overlay.classList.add('show');
+                
+                // Auto-hide after 3 seconds
+                setTimeout(function() {
+                    hidePopup();
+                }, 3000);
+            }
+            
+            // Close popup when clicking the close button
+            closeBtn.addEventListener('click', hidePopup);
+            
+            // Close popup when clicking the overlay
+            overlay.addEventListener('click', hidePopup);
+            
+            // Close popup when pressing Escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    hidePopup();
+                }
+            });
+            
+            function hidePopup() {
+                popup.classList.remove('show');
+                overlay.classList.remove('show');
+            }
+        });
+    </script>
 </body>
 </html> 
